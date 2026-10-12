@@ -11,7 +11,7 @@ import uuid
 
 import pytest
 
-from graph_owl_sdk import GraphOwlClient, IngestBuilder
+from graphowl_ingest import GraphOwlClient, IngestBuilder
 
 BASE_URL = os.environ.get("GRAPH_OWL_BASE_URL")
 

@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-import graph_owl_sdk
+import graphowl_ingest
 
 EXAMPLES = Path(__file__).resolve().parents[1] / "examples"
 ADAPTER = EXAMPLES / "csv_adapter.py"
@@ -108,7 +108,7 @@ def test_the_example_pushes_through_the_sdk_end_to_end(monkeypatch) -> None:
         seen.append(json.loads(request.data))
         return Response()
 
-    real_client = graph_owl_sdk.GraphOwlClient
+    real_client = graphowl_ingest.GraphOwlClient
     monkeypatch.setattr(
         adapter,
         "GraphOwlClient",
@@ -131,22 +131,22 @@ def test_the_example_imports_only_published_sdk_surface() -> None:
     sdk_imports: list[str] = []
     for node in ast.walk(tree):
         if isinstance(node, ast.ImportFrom) and (node.module or "").startswith(
-            "graph_owl_sdk"
+            "graphowl_ingest"
         ):
-            assert node.module == "graph_owl_sdk", (
+            assert node.module == "graphowl_ingest", (
                 f"the example reaches into `{node.module}`; an example that uses "
                 "internals teaches everybody reading it to use internals"
             )
             sdk_imports.extend(alias.name for alias in node.names)
         if isinstance(node, ast.Import):
             for alias in node.names:
-                assert alias.name == "graph_owl_sdk" or not alias.name.startswith(
-                    "graph_owl_sdk."
+                assert alias.name == "graphowl_ingest" or not alias.name.startswith(
+                    "graphowl_ingest."
                 ), f"the example imports `{alias.name}`, which is not published"
 
     assert sdk_imports, "the example is supposed to demonstrate the SDK"
     for name in sdk_imports:
-        assert name in graph_owl_sdk.__all__, (
+        assert name in graphowl_ingest.__all__, (
             f"`{name}` is used by the example but is not in `__all__` — either "
             "publish it or stop using it"
         )

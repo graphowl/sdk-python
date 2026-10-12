@@ -1,4 +1,4 @@
-# GraphOWL ingestion SDK for Python
+# GraphOWL ingestion SDK for Python (`graphowl-ingest`)
 
 Push entities, relationships and extracted claims into [GraphOWL](https://github.com/graphowl/graphowl) from anything you can write Python against: a script, a scheduler job, a notebook.
 
@@ -20,7 +20,7 @@ Requires Python 3.10 or newer.
 ## Push
 
 ```python
-from graph_owl_sdk import GraphOwlClient, IngestBuilder
+from graphowl_ingest import GraphOwlClient, IngestBuilder
 
 client = GraphOwlClient(base_url="https://your-graphowl-host", token=TOKEN)
 

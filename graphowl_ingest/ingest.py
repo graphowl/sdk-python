@@ -172,7 +172,7 @@ def is_retryable(status: int) -> bool:
 
 class GraphOwlError(RuntimeError):
     def __init__(self, status: int, body: Any) -> None:
-        super().__init__(f"graph-owl responded {status}: {body!r}")
+        super().__init__(f"GraphOWL responded {status}: {body!r}")
         self.status = status
         self.body = body
 

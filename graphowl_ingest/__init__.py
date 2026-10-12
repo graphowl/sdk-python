@@ -1,4 +1,4 @@
-"""The graph-owl ingestion SDK"""
+"""The GraphOWL ingestion SDK"""
 
 from .contract import CONTRACT_VERSION, REQUIRED_PATHS
 from .ingest import (

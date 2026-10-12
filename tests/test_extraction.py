@@ -11,7 +11,7 @@ import hashlib
 import json
 from datetime import datetime, timezone
 
-from graph_owl_sdk.extraction import (
+from graphowl_ingest.extraction import (
     ASSERT_THRESHOLD,
     CATALOG_PREDICATES,
     SURFACE_THRESHOLD,
@@ -220,7 +220,7 @@ def test_a_decision_always_states_its_verdict():
 # ── the policy is documented here and enforced there ───────────────────────
 
 
-def test_the_bands_match_the_ones_graph_owl_applies():
+def test_the_bands_match_the_ones_graphowl_applies():
     """Mirrored for a worker's convenience, never as the decision. If these ever
     disagree with the server the server wins — which is why nothing in this SDK
     branches on them."""

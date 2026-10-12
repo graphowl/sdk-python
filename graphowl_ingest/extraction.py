@@ -2,16 +2,16 @@
 
 **This is the module that makes decision 0 real.** PDF layout analysis, OCR and
 LLM extraction have a Python ecosystem Rust does not come close to matching, and
-none of it belongs on graph-owl's read path — so the worker runs out of process,
+none of it belongs on GraphOWL's read path — so the worker runs out of process,
 in Python, and hands over JSON. What is in this file is that JSON, as
 dataclasses, plus the one client call that sends it.
 
 **What is deliberately *not* here is the policy.** A worker does not decide
 whether its confidence is high enough to assert, whether its predicate exists,
-or whether a human already rejected the same claim. graph-owl decides all three,
+or whether a human already rejected the same claim. GraphOWL decides all three,
 on its side of the boundary, for every claim from every source — including its
 own in-process extractor, which gets no exemption for being local. A worker
-proposes; graph-owl disposes. Putting the bands in this file would move the
+proposes; GraphOWL disposes. Putting the bands in this file would move the
 decision to the component least able to promise anything about it, which for an
 LLM extractor is not a hypothetical.
 
@@ -46,7 +46,7 @@ class TextSpan:
         """The text this span refers to, or ``None`` if it does not fit.
 
         Worth calling before submitting: a span the worker cannot resolve is one
-        graph-owl cannot resolve either, and the reviewer sees "(the evidence
+        GraphOWL cannot resolve either, and the reviewer sees "(the evidence
         span does not resolve against the source)" instead of a sentence.
         """
         raw = text.encode("utf-8")
@@ -96,7 +96,7 @@ class ParsedDocument:
         return body
 
     def fingerprint(self) -> str:
-        """The content hash graph-owl judges idempotence on.
+        """The content hash GraphOWL judges idempotence on.
 
         Exposed so a worker can skip parsing a document it already submitted —
         the server would answer ``alreadyExtracted`` anyway, but a PDF worker
@@ -131,7 +131,7 @@ class Provenance:
 class Claim:
     """One proposed assertion.
 
-    ``confidence`` is a **proposal, never a decision**. graph-owl's bands decide
+    ``confidence`` is a **proposal, never a decision**. GraphOWL's bands decide
     what it buys: at or above 0.8 it asserts, between 0.5 and 0.8 it waits for a
     human, below 0.5 it is discarded and counted. A worker that inflates this
     number does not gain anything it could not have got honestly — but it does
@@ -162,7 +162,7 @@ class ExtractionResult:
         return {"claims": [claim.wire() for claim in self.claims]}
 
 
-#: The predicates graph-owl will accept. Mirrored here so a worker can drop an
+#: The predicates GraphOWL will accept. Mirrored here so a worker can drop an
 #: off-vocabulary claim before spending a round trip on it — **not** so it can
 #: decide the question. The server checks again regardless, which is what makes
 #: this a convenience rather than a trust boundary, and a worker running against
@@ -177,7 +177,7 @@ CATALOG_PREDICATES = (
     "dependsOn",
 )
 
-#: What graph-owl does with a proposed confidence. Documented, not enforced —
+#: What GraphOWL does with a proposed confidence. Documented, not enforced —
 #: see the module note.
 ASSERT_THRESHOLD = 0.8
 SURFACE_THRESHOLD = 0.5
@@ -190,9 +190,9 @@ def submit_extraction(
     extractor: str,
     extractor_version: str,
 ) -> dict[str, Any]:
-    """Hand a run to graph-owl and return what it did with it.
+    """Hand a run to GraphOWL and return what it did with it.
 
-    ``client`` is a :class:`~graph_owl_sdk.ingest.GraphOwlClient` — taken as a
+    ``client`` is a :class:`~graphowl_ingest.ingest.GraphOwlClient` — taken as a
     parameter rather than made a method on it so this module stays importable
     without the ingestion path, and so a worker can be tested against a fake
     that records what it was sent.
@@ -206,7 +206,7 @@ def submit_extraction(
       has already been through this exact extractor, so nothing was done.
 
     A worker retrying after a timeout gets the second, which is how it tells
-    "graph-owl already had this" from "graph-owl found nothing in it". Those look
+    "GraphOWL already had this" from "GraphOWL found nothing in it". Those look
     identical if you only count claims.
 
     :raises GraphOwlError: if the catalog refuses the submission.

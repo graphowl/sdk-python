@@ -9,7 +9,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from graph_owl_sdk import CONTRACT_VERSION, REQUIRED_PATHS
+from graphowl_ingest import CONTRACT_VERSION, REQUIRED_PATHS
 
 CONTRACT = json.loads(
     (Path(__file__).resolve().parents[1] / "openapi.json").read_text(encoding="utf-8")

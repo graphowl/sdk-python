@@ -12,7 +12,7 @@ from typing import Any
 
 import pytest
 
-from graph_owl_sdk import (
+from graphowl_ingest import (
     MAX_ITEMS_PER_PUSH,
     GraphOwlClient,
     GraphOwlError,
@@ -22,7 +22,7 @@ from graph_owl_sdk import (
     chunk,
     is_retryable,
 )
-from graph_owl_sdk.ingest import EntityDraft, entities_from_rows
+from graphowl_ingest.ingest import EntityDraft, entities_from_rows
 
 
 def entities(count: int) -> list[EntityDraft]:

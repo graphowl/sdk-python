@@ -2,7 +2,7 @@
 """A complete custom adapter, in one file
 
 Reads a CSV of tables, derives the hierarchy they imply, and pushes it. This is
-the reference for anybody writing an adapter for a source graph-owl will never
+the reference for anybody writing an adapter for a source GraphOWL will never
 ship a connector for.
 
 **It uses only the published SDK surface.** Nothing here imports a private
@@ -21,7 +21,7 @@ import csv
 import sys
 from typing import Iterable
 
-from graph_owl_sdk import GraphOwlClient, IngestBuilder, IngestRequest
+from graphowl_ingest import GraphOwlClient, IngestBuilder, IngestRequest
 
 
 def build(rows: Iterable[dict[str, str]]) -> IngestRequest:
